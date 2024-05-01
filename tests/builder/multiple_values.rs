@@ -499,7 +499,7 @@ fn positional_exact_more() {
         .try_get_matches_from(vec!["myprog", "val1", "val2", "val3", "val4"]);
 
     assert!(m.is_err());
-    assert_eq!(m.unwrap_err().kind(), ErrorKind::WrongNumberOfValues);
+    assert_eq!(m.unwrap_err().kind(), ErrorKind::UnknownArgument);
 }
 
 #[test]
@@ -595,7 +595,7 @@ fn positional_max_more() {
         .try_get_matches_from(vec!["myprog", "val1", "val2", "val3", "val4"]);
 
     assert!(m.is_err());
-    assert_eq!(m.unwrap_err().kind(), ErrorKind::TooManyValues);
+    assert_eq!(m.unwrap_err().kind(), ErrorKind::UnknownArgument);
 }
 
 #[test]
@@ -1728,7 +1728,7 @@ fn issue_2229() {
         ]);
 
     assert!(m.is_err());
-    assert_eq!(m.unwrap_err().kind(), ErrorKind::WrongNumberOfValues);
+    assert_eq!(m.unwrap_err().kind(), ErrorKind::UnknownArgument);
 }
 
 #[test]

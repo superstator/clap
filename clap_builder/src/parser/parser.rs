@@ -392,8 +392,10 @@ impl<'cmd> Parser<'cmd> {
                         );
                         arg_values.push(arg_os.to_value_os().to_owned());
 
-                        // Only increment the positional counter if it doesn't allow multiples
-                        if !arg.is_multiple() {
+                        // Increment the positional counter if it doesn't allow multiples, or
+                        // we've found the maximum num_vals for this arg
+                        let max_vals = arg.get_num_args().map(|r| r.max_values()).unwrap_or(usize::MAX);
+                        if !arg.is_multiple() || max_vals <= arg_values.len() {
                             pos_counter += 1;
                             ParseState::ValuesDone
                         } else {
