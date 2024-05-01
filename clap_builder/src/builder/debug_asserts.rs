@@ -576,11 +576,16 @@ fn _verify_positionals(cmd: &Command) -> bool {
         let last = &cmd.get_keymap()[&KeyType::Position(highest_idx)];
         let second_to_last = &cmd.get_keymap()[&KeyType::Position(highest_idx - 1)];
 
+        let other_variadic = |a: &Arg| a.get_index().unwrap_or(0) < highest_idx && a.is_variadic();
         // Either the final positional is required
         // Or the second to last has a terminator or .last(true) set
+        // Or no other arguments are variadic
         let ok = last.is_required_set()
-            || (second_to_last.terminator.is_some() || second_to_last.is_last_set())
-            || last.is_last_set();
+            || second_to_last.terminator.is_some()
+            || second_to_last.is_last_set()
+            || last.is_last_set()
+            || !cmd.get_positionals().any(other_variadic);
+
         assert!(
             ok,
             "Positional argument `{last}` *must* have `required(true)` or `last(true)` set \

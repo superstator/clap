@@ -4394,6 +4394,11 @@ impl Arg {
         rendered
     }
 
+    /// Argument can match a variable number of values and has no terminator value
+    pub(crate) fn is_variadic(&self) -> bool {
+        self.num_vals.is_some_and(|n| !n.is_fixed()) && self.terminator.is_none()
+    }
+
     /// Either multiple values or occurrences
     pub(crate) fn is_multiple(&self) -> bool {
         self.is_multiple_values_set() || matches!(*self.get_action(), ArgAction::Append)
