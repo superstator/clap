@@ -580,6 +580,7 @@ fn _verify_positionals(cmd: &Command) -> bool {
         // Either the final positional is required
         // Or the second to last has a terminator or .last(true) set
         // Or no other arguments are variadic
+        // Or all but the last argument are required
         let ok = last.is_required_set()
             || second_to_last.terminator.is_some()
             || second_to_last.is_last_set()
@@ -593,7 +594,7 @@ fn _verify_positionals(cmd: &Command) -> bool {
         );
 
         // We make sure if the second to last is Multiple the last is ArgSettings::Last
-        let ok = second_to_last.is_multiple() || last.is_last_set();
+        let ok = !second_to_last.is_variadic() || last.is_last_set();
         assert!(
             ok,
             "Only the last positional argument, or second to last positional \
